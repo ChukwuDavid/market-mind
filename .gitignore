@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+.turbo/
+
+# Env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# OS / IDE
+.DS_Store
+*.log
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+
+# Python (later)
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# Supabase
+**/supabase/.branches/
+**/supabase/.temp/
+**/supabase/.env

@@ -50,6 +50,13 @@
     );
 }
 
+.bg-chart-grid {
+  background-image:
+    linear-gradient(to right, rgb(255 255 255 / 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.025) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
 html,
 body {
   background: var(--color-background);

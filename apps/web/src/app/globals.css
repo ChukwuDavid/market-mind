@@ -16,12 +16,13 @@
   --color-foreground-muted: #9aa0a6;
   --color-foreground-dim: #5f6368;
 
-  /* Brand & semantic */
-  --color-primary: #5b8fff;
-  --color-primary-soft: #2a3a6b;
-  --color-bull: #00d68f;
-  --color-bear: #ff5470;
-  --color-warning: #ffb86b;
+  /* Brand & semantic — warm amber palette */
+  --color-primary: #f5b942;
+  --color-primary-foreground: #1a1408;
+  --color-primary-soft: #3d2c14;
+  --color-bull: #22c486;
+  --color-bear: #ff6f6f;
+  --color-warning: #ff7a45;
   --color-info: #c792ea;
 
   /* Radii */

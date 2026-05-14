@@ -10,7 +10,7 @@ export function RightRail() {
   const [tab, setTab] = useState<Tab>("news");
 
   return (
-    <aside className="flex w-[360px] shrink-0 flex-col border-l border-border bg-background">
+    <aside className="flex w-90 shrink-0 flex-col border-l border-border bg-background">
       <div className="flex h-12 border-b border-border">
         <TabButton
           active={tab === "news"}
@@ -85,7 +85,7 @@ function SignalsPanel() {
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
           No signals yet
         </div>
-        <div className="mx-auto max-w-[240px] text-xs leading-relaxed text-foreground-muted">
+        <div className="mx-auto max-w-60 text-xs leading-relaxed text-foreground-muted">
           Click <span className="text-foreground">Analyze</span> in the top bar
           to generate signals for a market group.
         </div>

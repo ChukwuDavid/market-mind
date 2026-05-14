@@ -39,7 +39,7 @@ function AnalyzeButton() {
   return (
     <button
       type="button"
-      className="flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-white shadow-[0_0_0_1px_rgb(91_143_255/0.4),0_8px_24px_-8px_rgb(91_143_255/0.5)] transition-colors hover:bg-primary/90"
+      className="flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-sm font-medium text-primary-foreground shadow-[0_0_0_1px_rgb(245_185_66/0.4),0_8px_24px_-8px_rgb(245_185_66/0.5)] transition-colors hover:bg-primary/90"
     >
       <span>Analyze</span>
       <ChevronDown size={14} className="opacity-70" />

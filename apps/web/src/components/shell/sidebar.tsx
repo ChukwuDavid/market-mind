@@ -1,128 +1,67 @@
 "use client";
 
-import { Plus } from "lucide-react";
-import {
-  INSTRUMENT_GROUPS,
-  type Instrument,
-} from "@/lib/constants/instruments";
 import { useMarketStore } from "@/stores/market-store";
-import { useQuotesPolling } from "@/lib/hooks/use-quotes-polling";
-import { formatPrice, formatChangePct } from "@/lib/market-data/price-format";
+import { INSTRUMENT_GROUPS } from "@/lib/constants/instruments";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const symbol = useMarketStore((s) => s.symbol);
   const setSymbol = useMarketStore((s) => s.setSymbol);
 
-  // Start polling all watchlist quotes on mount
-  useQuotesPolling();
-
   return (
-    <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-background">
-      <div className="flex h-12 items-center justify-between border-b border-border px-5">
-        <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
+    <aside className="flex w-64 shrink-0 flex-col border-r border-border bg-background">
+      <div className="flex h-12 items-center border-b border-border px-4">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
           Watchlist
-        </h2>
-        <button
-          aria-label="Add asset"
-          className="text-foreground-dim transition-colors hover:text-foreground"
-        >
-          <Plus size={14} />
-        </button>
+        </span>
       </div>
 
-      <div className="flex-1 space-y-5 overflow-y-auto px-2 py-4">
+      <div className="flex-1 overflow-y-auto">
         {INSTRUMENT_GROUPS.map((group) => (
-          <Group
+          <div
             key={group.id}
-            label={group.label}
-            items={group.items}
-            selected={symbol}
-            onSelect={setSymbol}
-          />
+            className="border-b border-border last:border-b-0"
+          >
+            <div className="sticky top-0 z-10 flex h-7 items-center bg-background px-4">
+              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
+                {group.label}
+              </span>
+            </div>
+            <div>
+              {group.items.map((item) => {
+                const active = item.symbol === symbol;
+                return (
+                  <button
+                    key={item.symbol}
+                    onClick={() => setSymbol(item.symbol)}
+                    className={cn(
+                      "flex w-full items-center gap-3 px-4 py-2 text-left transition-colors",
+                      active
+                        ? "bg-primary/10 text-foreground"
+                        : "text-foreground-muted hover:bg-surface hover:text-foreground",
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        "h-4 w-0.5 rounded-full transition-colors",
+                        active ? "bg-primary" : "bg-transparent",
+                      )}
+                    />
+                    <div className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate text-[13px] font-medium">
+                        {item.display}
+                      </span>
+                      <span className="truncate text-[11px] text-foreground-dim">
+                        {item.name}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
         ))}
       </div>
     </aside>
-  );
-}
-
-interface GroupProps {
-  label: string;
-  items: Instrument[];
-  selected: string;
-  onSelect: (symbol: string) => void;
-}
-
-function Group({ label, items, selected, onSelect }: GroupProps) {
-  return (
-    <div>
-      <div className="mb-1.5 flex items-center justify-between px-3">
-        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
-          {label}
-        </span>
-        <span className="font-mono text-[10px] text-foreground-dim/60">
-          {items.length}
-        </span>
-      </div>
-      <div>
-        {items.map((item) => (
-          <Row
-            key={item.symbol}
-            item={item}
-            active={selected === item.symbol}
-            onClick={() => onSelect(item.symbol)}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Row({
-  item,
-  active,
-  onClick,
-}: {
-  item: Instrument;
-  active: boolean;
-  onClick: () => void;
-}) {
-  // Subscribe just to this symbol's quote — minimal re-renders
-  const quote = useMarketStore((s) => s.quotes[item.symbol]);
-
-  const toneClass =
-    quote == null
-      ? "text-foreground-dim"
-      : quote.changePct >= 0
-        ? "text-bull"
-        : "text-bear";
-
-  return (
-    <button
-      onClick={onClick}
-      className={cn(
-        "group flex w-full items-center justify-between rounded-md px-3 py-2 text-left transition-colors",
-        active
-          ? "bg-primary-soft/40 ring-1 ring-primary/30"
-          : "hover:bg-white/4",
-      )}
-    >
-      <div className="min-w-0">
-        <div className="truncate text-sm font-medium tracking-tight">
-          {item.display}
-        </div>
-        <div className="truncate text-[11px] text-foreground-dim">
-          {item.name}
-        </div>
-      </div>
-      <div className="ml-3 shrink-0 text-right">
-        <div className="font-mono text-[11px] tabular-nums text-foreground">
-          {formatPrice(item.symbol, quote?.price)}
-        </div>
-        <div className={cn("font-mono text-[10px] tabular-nums", toneClass)}>
-          {formatChangePct(quote?.changePct)}
-        </div>
-      </div>
-    </button>
   );
 }

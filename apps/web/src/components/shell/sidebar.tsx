@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
 import { Plus } from "lucide-react";
 import {
   INSTRUMENT_GROUPS,
-  DEFAULT_SYMBOL,
   type Instrument,
 } from "@/lib/constants/instruments";
+import { useMarketStore } from "@/stores/market-store";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
-  const [selected, setSelected] = useState<string>(DEFAULT_SYMBOL);
+  const symbol = useMarketStore((s) => s.symbol);
+  const setSymbol = useMarketStore((s) => s.setSymbol);
 
   return (
     <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-background">
@@ -34,8 +34,8 @@ export function Sidebar() {
             key={group.id}
             label={group.label}
             items={group.items}
-            selected={selected}
-            onSelect={setSelected}
+            selected={symbol}
+            onSelect={setSymbol}
           />
         ))}
       </div>

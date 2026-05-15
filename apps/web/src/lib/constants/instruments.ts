@@ -134,30 +134,7 @@ export const INSTRUMENT_GROUPS: InstrumentGroup[] = [
       },
     ],
   },
-  {
-    id: "indices",
-    label: "Indices",
-    items: [
-      {
-        symbol: "SPX",
-        display: "SPX 500",
-        name: "S&P 500",
-        category: "indices",
-      },
-      {
-        symbol: "NDX",
-        display: "NAS 100",
-        name: "Nasdaq 100",
-        category: "indices",
-      },
-      {
-        symbol: "DJI",
-        display: "DOW 30",
-        name: "Dow Jones Industrial",
-        category: "indices",
-      },
-    ],
-  },
+
   {
     id: "commodities",
     label: "Commodities",
@@ -166,12 +143,6 @@ export const INSTRUMENT_GROUPS: InstrumentGroup[] = [
         symbol: "XAUUSD",
         display: "Gold",
         name: "Gold / US Dollar",
-        category: "commodities",
-      },
-      {
-        symbol: "WTIUSD",
-        display: "Oil (WTI)",
-        name: "WTI Crude Oil",
         category: "commodities",
       },
     ],

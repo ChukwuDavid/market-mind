@@ -6,15 +6,19 @@ import {
   type Instrument,
 } from "@/lib/constants/instruments";
 import { useMarketStore } from "@/stores/market-store";
+import { useQuotesPolling } from "@/lib/hooks/use-quotes-polling";
+import { formatPrice, formatChangePct } from "@/lib/market-data/price-format";
 import { cn } from "@/lib/utils";
 
 export function Sidebar() {
   const symbol = useMarketStore((s) => s.symbol);
   const setSymbol = useMarketStore((s) => s.setSymbol);
 
+  // Start polling all watchlist quotes on mount
+  useQuotesPolling();
+
   return (
     <aside className="flex w-72 shrink-0 flex-col border-r border-border bg-background">
-      {/* Header */}
       <div className="flex h-12 items-center justify-between border-b border-border px-5">
         <h2 className="font-mono text-[10px] uppercase tracking-[0.2em] text-foreground-dim">
           Watchlist
@@ -27,7 +31,6 @@ export function Sidebar() {
         </button>
       </div>
 
-      {/* Groups */}
       <div className="flex-1 space-y-5 overflow-y-auto px-2 py-4">
         {INSTRUMENT_GROUPS.map((group) => (
           <Group
@@ -84,6 +87,16 @@ function Row({
   active: boolean;
   onClick: () => void;
 }) {
+  // Subscribe just to this symbol's quote — minimal re-renders
+  const quote = useMarketStore((s) => s.quotes[item.symbol]);
+
+  const toneClass =
+    quote == null
+      ? "text-foreground-dim"
+      : quote.changePct >= 0
+        ? "text-bull"
+        : "text-bear";
+
   return (
     <button
       onClick={onClick}
@@ -103,8 +116,12 @@ function Row({
         </div>
       </div>
       <div className="ml-3 shrink-0 text-right">
-        <div className="font-mono text-[11px] text-foreground-dim">—</div>
-        <div className="font-mono text-[10px] text-foreground-dim">—</div>
+        <div className="font-mono text-[11px] tabular-nums text-foreground">
+          {formatPrice(item.symbol, quote?.price)}
+        </div>
+        <div className={cn("font-mono text-[10px] tabular-nums", toneClass)}>
+          {formatChangePct(quote?.changePct)}
+        </div>
       </div>
     </button>
   );

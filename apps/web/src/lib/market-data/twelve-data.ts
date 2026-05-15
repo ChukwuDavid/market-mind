@@ -1,4 +1,5 @@
 import type { Candle, CandleQuery, Timeframe } from "./types";
+import { toTwelveDataSymbol } from "./symbol-mapping";
 
 /**
  * Map our canonical timeframes to Twelve Data's interval names.
@@ -18,18 +19,18 @@ const TIMEFRAME_MAP: Record<Timeframe, string> = {
  * Normalize canonical symbols to Twelve Data's expected format.
  * Twelve Data uses "EUR/USD" not "EURUSD", "BTC/USD" not "BTCUSD", etc.
  */
-function toTwelveDataSymbol(symbol: string): string {
-  // Forex pairs (6 letters, e.g. EURUSD → EUR/USD)
-  if (/^[A-Z]{6}$/.test(symbol)) {
-    return `${symbol.slice(0, 3)}/${symbol.slice(3)}`;
-  }
-  // Gold
-  if (symbol === "XAUUSD") return "XAU/USD";
-  // Oil (WTI) — Twelve Data symbol
-  if (symbol === "WTIUSD") return "USOIL";
-  // Indices, Stocks — pass through (SPX, NDX, DJI, AAPL, etc.)
-  return symbol;
-}
+// function toTwelveDataSymbol(symbol: string): string {
+//   // Forex pairs (6 letters, e.g. EURUSD → EUR/USD)
+//   if (/^[A-Z]{6}$/.test(symbol)) {
+//     return `${symbol.slice(0, 3)}/${symbol.slice(3)}`;
+//   }
+//   // Gold
+//   if (symbol === "XAUUSD") return "XAU/USD";
+//   // Oil (WTI) — Twelve Data symbol
+//   if (symbol === "WTIUSD") return "USOIL";
+//   // Indices, Stocks — pass through (SPX, NDX, DJI, AAPL, etc.)
+//   return symbol;
+// }
 
 interface TwelveDataResponse {
   values?: Array<{
@@ -56,6 +57,7 @@ export async function fetchTwelveDataCandles(
   url.searchParams.set("symbol", symbol);
   url.searchParams.set("interval", interval);
   url.searchParams.set("outputsize", String(limit));
+  url.searchParams.set("timezone", "UTC");
   url.searchParams.set("apikey", apiKey);
 
   const res = await fetch(url, {

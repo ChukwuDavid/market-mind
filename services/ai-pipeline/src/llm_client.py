@@ -81,11 +81,15 @@ class MockLLMClient(LLMClient):
             })
 
         if "trade thesis" in u:
-            side = (
-                "buy" if "BULLISH" in user
-                else "sell" if "BEARISH" in user
-                else "hold"
-            )
+            # Decision keyed on TECHNICAL direction specifically — the synthesis
+            # prompt has 4 specialist directions, so a plain substring match
+            # would always trip on whichever one happens to be "BULLISH".
+            if "technical (bullish" in u:
+                side = "buy"
+            elif "technical (bearish" in u:
+                side = "sell"
+            else:
+                side = "hold"
             return json.dumps({
                 "side": side,
                 "confidence": 72,
@@ -95,8 +99,6 @@ class MockLLMClient(LLMClient):
                 ),
                 "invalidation_condition": "A break of the recent swing level invalidates the thesis.",
             })
-
-        return json.dumps({"error": "unknown_prompt"})
 
     async def complete_batch(
         self, prompts: list[tuple[str, str]], max_tokens: int = 512

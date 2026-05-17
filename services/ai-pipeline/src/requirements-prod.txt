@@ -1,0 +1,13 @@
+# Production-only dependencies for the RunPod Docker image.
+# DO NOT pip install locally — these need CUDA/GPU.
+# See Dockerfile (Phase 8.3) for install order.
+
+# vLLM and friends — installed without version pins to let Docker resolve a working set
+vllm
+transformers
+accelerate
+sentencepiece
+huggingface-hub
+
+# RunPod Serverless SDK
+runpod
